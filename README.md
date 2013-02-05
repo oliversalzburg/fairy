@@ -1,7 +1,7 @@
 fairy
 =====
 
-will invoke predefined blink patterns on your blink(1)
+will invoke predefined blink patterns on your [blink(1)](https://github.com/todbot/blink1)
 
 Installation
 ------------
