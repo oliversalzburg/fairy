@@ -1,15 +1,7 @@
 var dgram = require( "dgram" );
-var terminal = require( "child_process" ).spawn( "bash" );
-
-terminal.stdout.on('data', function (data) {
-    console.log('stdout: ' + data);
-});
-
-terminal.on('exit', function (code) {
-        console.log('child process exited with code ' + code);
-});
-
 var udpServer = dgram.createSocket( "udp4" );
+var Blink1 = require( "node-blink1" );
+var blink1 = new Blink1.Blink1();
 
 udpServer.on( "listening", function() {
   var address = udpServer.address();
@@ -20,31 +12,35 @@ udpServer.on( "listening", function() {
 udpServer.on( "message", function( msg, rinfo ) {
   var buffer = new Buffer( msg );
 
-  var state = buffer.toString( );
+  var state = buffer.toString();
   console.log( "Got state " + state + " from " + rinfo.address + ":" + rinfo.port );
-  blink("A"==state);
+  blink( "A" == state );
 } );
 
-var exec = require('child_process').exec,
-    child;
 
-function blink(state) {
-var color=(state)?"--green":"--red";
-var commandLine = "sudo ./blink1-tool "+color+" --blink 1&&sleep 1";
-console.log( "Executing: ", commandLine );
-
-child = exec( commandLine,
-    function (error, stdout, stderr) {
-        if(stdout!==''){
-            console.log('---------stdout: ---------\n' + stdout);
-        }
-        if(stderr!==''){
-            console.log('---------stderr: ---------\n' + stderr);
-        }
-        if (error !== null) {
-            console.log('---------exec error: ---------\n[' + error+']');
-        }
-    });
+function blink( state ) {
+  if( state ) {
+    blink1.fadeToRGB( 500, 0, 255, 0, function() {
+      blink1.fadeToRGB( 500, 0, 0, 0 );
+    } );
+  } else {
+    blink1.fadeToRGB( 500, 255, 0, 0, function() {
+      blink1.fadeToRGB( 500, 0, 0, 0 );
+    } );
+  }
 }
+
+// Why not?
+blink1.fadeToRGB( 500, 255, 0, 0, function() {
+  blink1.fadeToRGB( 500, 0, 0, 0, function() {
+    blink1.fadeToRGB( 500, 0, 255, 0, function() {
+      blink1.fadeToRGB( 500, 0, 0, 0, function() {
+        blink1.fadeToRGB( 500, 0, 0, 255, function() {
+          blink1.fadeToRGB( 500, 0, 0, 0 );
+        } );
+      } );
+    } );
+  } );
+} );
 
 udpServer.bind( 41234 );

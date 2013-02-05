@@ -1,0 +1,10 @@
+{
+  "name"        :"fairy",
+  "description" :"Uses pixie dust to light up your blink(1)",
+  "author"      :"Oliver Salzburg",
+  "version"     :"0.0.1",
+  "private"     :false,
+  "dependencies":{
+    "node-blink1":">= 0.0.1"
+  }
+}
