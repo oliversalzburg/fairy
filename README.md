@@ -23,3 +23,9 @@ Edit `dust.js`. The format is:
       [duration, red, green, blue],
       ...
     ]
+
+Usage
+-----
+Just make sure to start with elevated privileges. Otherwise no connection to the blink(1) can be established.
+
+    sudo node app.js
