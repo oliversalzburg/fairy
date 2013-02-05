@@ -41,9 +41,9 @@ var options = require( __dirname + "/dust.js" );
  * @returns {Function}
  * @source http://stackoverflow.com/questions/899102/how-do-i-store-javascript-functions-in-a-queue-for-them-to-be-executed-eventuall
  */
-var wrapFunction = function(fn, context, params) {
+var wrapFunction = function( fn, context, params ) {
   return function() {
-    fn.apply(context, params);
+    fn.apply( context, params );
   };
 };
 
@@ -70,12 +70,22 @@ udpServer.on( "message", function( msg, rinfo ) {
 } );
 
 /**
+ * Deep-clones an object
+ * @param a The object to clone
+ * @returns {*} The cloned object
+ * @see http://stackoverflow.com/a/12826757/259953
+ */
+function simpleClone( a ) {
+  return JSON.parse( JSON.stringify( a ) );
+}
+
+/**
  * Retrieve the pixie dust recipe for a given UDP message
  * @param message
  * @returns {*}
  */
 function getPixieDustForMessage( message ) {
-  return options[ message ];
+  return simpleClone( options[ message ] );
 }
 
 /**
@@ -85,7 +95,7 @@ function getPixieDustForMessage( message ) {
 function blink( pixieDust ) {
   var parameters = pixieDust.shift();
   if( parameters ) {
-    var callback = wrapFunction( blink, this, [ pixieDust ] );
+    var callback = wrapFunction( blink, this, [pixieDust] );
     parameters.push( callback );
     blink1.fadeToRGB.apply( blink1, parameters );
   }
