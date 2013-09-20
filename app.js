@@ -66,7 +66,9 @@ udpServer.on( "message", function( msg, rinfo ) {
 
   // Get the pixie dust for this message
   var pixieDust = getPixieDustForMessage( state );
-  blink( pixieDust );
+  if( pixieDust ) {
+    blink( pixieDust );
+  }
 } );
 
 /**
@@ -85,7 +87,13 @@ function simpleClone( a ) {
  * @returns {*}
  */
 function getPixieDustForMessage( message ) {
-  return simpleClone( options[ message ] );
+  for( var pattern in options ) {
+    if( options.hasOwnProperty( pattern ) ) {
+      if( message.match( new RegExp( pattern ) ) ) {
+        return simpleClone( options[ pattern ] );
+      }
+    }
+  }
 }
 
 /**
