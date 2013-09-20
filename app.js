@@ -122,4 +122,4 @@ blink1.fadeToRGB( 500, 255, 0, 0, function() {
   } );
 } );
 
-udpServer.bind( 41234 );
+udpServer.bind( 30000 );
