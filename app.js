@@ -27,9 +27,13 @@
  */
 
 var dgram = require( "dgram" );
-var udpServer = dgram.createSocket( "udp4" );
 var Blink1 = require( "node-blink1" );
 var blink1 = new Blink1.Blink1();
+
+var argv = require( "optimist" )
+  .default( "bind", "0.0.0.0" )
+  .default( "port", 30000 )
+  .argv;
 
 var options = require( __dirname + "/dust.js" );
 
@@ -46,6 +50,9 @@ var wrapFunction = function( fn, context, params ) {
     fn.apply( context, params );
   };
 };
+
+
+var udpServer = dgram.createSocket( "udp4" );
 
 /**
  * Invoked when the UDP listener becomes ready.
@@ -70,6 +77,8 @@ udpServer.on( "message", function( msg, rinfo ) {
     blink( pixieDust );
   }
 } );
+
+udpServer.bind( argv.port, argv.bind );
 
 /**
  * Deep-clones an object
@@ -121,5 +130,3 @@ blink1.fadeToRGB( 500, 255, 0, 0, function() {
     } );
   } );
 } );
-
-udpServer.bind( 30000 );
